@@ -2,7 +2,7 @@ import { useEventListener } from '@literal-ui/hooks'
 import Dexie from 'dexie'
 import { useRouter } from 'next/router'
 import { parseCookies, destroyCookie } from 'nookies'
-import { useState } from 'react'
+import { useState, type ChangeEvent } from 'react'
 
 import {
   ColorScheme,
@@ -30,7 +30,7 @@ export const Settings: React.FC = () => {
         <Item title={t('language')}>
           <Select
             value={locale}
-            onChange={(e) => {
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => {
               push(asPath, undefined, { locale: e.target.value })
             }}
           >
@@ -42,7 +42,7 @@ export const Settings: React.FC = () => {
         <Item title={t('color_scheme')}>
           <Select
             value={scheme}
-            onChange={(e) => {
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => {
               setScheme(e.target.value as ColorScheme)
             }}
           >
@@ -55,7 +55,7 @@ export const Settings: React.FC = () => {
           <Checkbox
             name={t('text_selection_menu.enable')}
             checked={settings.enableTextSelectionMenu}
-            onChange={(e) => {
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setSettings({
                 ...settings,
                 enableTextSelectionMenu: e.target.checked,
@@ -199,26 +199,34 @@ const AiConfiguration: React.FC<{
           name="ai-provider"
           placeholder="Provider (e.g. openai, deepseek)"
           value={config.provider}
-          onChange={(e) => setConfig({ ...config, provider: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setConfig({ ...config, provider: e.target.value })
+          }
         />
         <TextField
           name="ai-base-url"
           placeholder="Base URL (e.g. https://api.openai.com or https://api.deepseek.com)"
           value={config.baseUrl}
-          onChange={(e) => setConfig({ ...config, baseUrl: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setConfig({ ...config, baseUrl: e.target.value })
+          }
         />
         <TextField
           name="ai-model"
           placeholder="Model (e.g. gpt-4o-mini, deepseek-chat)"
           value={config.model}
-          onChange={(e) => setConfig({ ...config, model: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setConfig({ ...config, model: e.target.value })
+          }
         />
         <TextField
           name="ai-api-key"
           type="password"
           placeholder="API Key"
           value={config.apiKey}
-          onChange={(e) => setConfig({ ...config, apiKey: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setConfig({ ...config, apiKey: e.target.value })
+          }
         />
         <TextField
           name="ai-prompt"
@@ -226,7 +234,9 @@ const AiConfiguration: React.FC<{
           placeholder="Custom prompt. You can use {word} and {context} as placeholders."
           value={config.prompt}
           className="min-h-[100px]"
-          onChange={(e) => setConfig({ ...config, prompt: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+            setConfig({ ...config, prompt: e.target.value })
+          }
         />
         <div className="flex gap-2">
           <Button onClick={handleSave} disabled={saved}>
