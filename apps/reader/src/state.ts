@@ -79,6 +79,7 @@ export interface AiState {
   sidebarMode: AiSidebarMode
   vocabulary: VocabularyItem[]
   config: AiConfig
+  quizContext?: string
 }
 
 const defaultAiState: AiState = {
@@ -87,6 +88,7 @@ const defaultAiState: AiState = {
   sidebarMode: 'dictionary',
   vocabulary: [],
   config: {},
+  quizContext: undefined,
 }
 
 const aiState = atom<AiState>({

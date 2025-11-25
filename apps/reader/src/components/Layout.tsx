@@ -6,6 +6,7 @@ import { IconType } from 'react-icons'
 import {
   MdFormatUnderlined,
   MdOutlineImage,
+  MdQuiz,
   MdSearch,
   MdToc,
   MdTimeline,
@@ -39,12 +40,14 @@ import { TimelineView } from './viewlets/TimelineView'
 import { TocView } from './viewlets/TocView'
 import { TypographyView } from './viewlets/TypographyView'
 import { VocabularyView } from './viewlets/VocabularyView'
+import { QuizView } from './viewlets/QuizView'
 
 export const Layout: React.FC = ({ children }) => {
   useColorScheme()
 
   const [ready, setReady] = useState(false)
   const [showVocabulary, setShowVocabulary] = useState(false)
+  const [showQuiz, setShowQuiz] = useState(false)
   const setAction = useSetAction()
   const mobile = useMobile()
 
@@ -58,7 +61,10 @@ export const Layout: React.FC = ({ children }) => {
     <div id="layout" className="select-none relative">
       <SplitView>
         {mobile === false && (
-          <ActivityBar onOpenVocabulary={() => setShowVocabulary(true)} />
+          <ActivityBar
+            onOpenVocabulary={() => setShowVocabulary(true)}
+            onOpenQuiz={() => setShowQuiz(true)}
+          />
         )}
         {mobile === true && <NavigationBar />}
         {ready && <SideBar />}
@@ -69,6 +75,13 @@ export const Layout: React.FC = ({ children }) => {
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
           <div className="h-[80vh] w-[min(960px,100%-32px)] overflow-hidden rounded-2xl bg-surface text-on-surface shadow-2xl">
             <VocabularyView onClose={() => setShowVocabulary(false)} />
+          </div>
+        </div>
+      )}
+      {showQuiz && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
+          <div className="h-[80vh] w-[min(960px,100%-32px)] overflow-hidden rounded-2xl bg-surface text-on-surface shadow-2xl">
+            <QuizView onClose={() => setShowQuiz(false)} />
           </div>
         </div>
       )}
@@ -139,8 +152,14 @@ const viewActions: IViewAction[] = [
   },
 ]
 
-const ActivityBar: React.FC<{ onOpenVocabulary: () => void }> = ({
+interface ActivityBarProps {
+  onOpenVocabulary: () => void
+  onOpenQuiz?: () => void
+}
+
+const ActivityBar: React.FC<ActivityBarProps> = ({
   onOpenVocabulary,
+  onOpenQuiz,
 }) => {
   useSplitViewItem(ActivityBar as React.FC, {
     preferredSize: 48,
@@ -150,7 +169,11 @@ const ActivityBar: React.FC<{ onOpenVocabulary: () => void }> = ({
   return (
     <div className="ActivityBar flex flex-col justify-between">
       <ViewActionBar env={Env.Desktop} />
-      <PageActionBar env={Env.Desktop} onOpenVocabulary={onOpenVocabulary} />
+      <PageActionBar
+        env={Env.Desktop}
+        onOpenVocabulary={onOpenVocabulary}
+        onOpenQuiz={onOpenQuiz}
+      />
     </div>
   )
 }
@@ -203,7 +226,14 @@ function ViewActionBar({ className, env }: EnvActionBarProps) {
   )
 }
 
-function PageActionBar({ env, onOpenVocabulary }: EnvActionBarProps & { onOpenVocabulary?: () => void }) {
+function PageActionBar({
+  env,
+  onOpenVocabulary,
+  onOpenQuiz,
+}: EnvActionBarProps & {
+  onOpenVocabulary?: () => void
+  onOpenQuiz?: () => void
+}) {
   const mobile = useMobile()
   const [action, setAction] = useState('Home')
   const t = useTranslation()
@@ -254,6 +284,13 @@ function PageActionBar({ env, onOpenVocabulary }: EnvActionBarProps & { onOpenVo
           title={t('vocabulary.title') || 'Vocabulary'}
           Icon={RiBook2Line}
           onClick={onOpenVocabulary}
+        />
+      )}
+      {onOpenQuiz && env === Env.Desktop && (
+        <Action
+          title={t('quiz.title') || 'Generate Quiz'}
+          Icon={MdQuiz}
+          onClick={onOpenQuiz}
         />
       )}
     </ActionBar>

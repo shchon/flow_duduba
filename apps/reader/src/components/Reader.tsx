@@ -387,6 +387,31 @@ function BookPane({ tab, onMouseDown }: BookPaneProps) {
 
   useDisablePinchZooming(iframe)
 
+  // Keep a quiz context snippet from the current chapter for reading tests
+  useEffect(() => {
+    if (!iframe) return
+    const doc = iframe.document
+    if (!doc || !doc.body) return
+
+    const textContent = doc.body.innerText || doc.body.textContent || ''
+    const normalized = textContent
+      .replace(/\s+/g, ' ')
+      .replace(/\u00A0/g, ' ')
+      .trim()
+
+    if (!normalized) return
+
+    // Use the beginning of the chapter so questions cover what was just read.
+    // Limit length to keep prompt size reasonable.
+    const maxLen = 4000
+    const slice = normalized.slice(0, maxLen)
+
+    setAiState((prev) => ({
+      ...prev,
+      quizContext: slice,
+    }))
+  }, [iframe, setAiState])
+
   // Highlight vocabulary words across all books
   useEffect(() => {
     if (!iframe) return
