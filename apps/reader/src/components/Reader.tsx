@@ -517,7 +517,7 @@ function highlightVocabularyInDocument(
     let lastIndex = 0
     let match: RegExpExecArray | null
     while ((match = regex.exec(text))) {
-      const matchText = match[0]
+      const matchText = match[0] ?? ''
       const start = match.index
       if (start > lastIndex) {
         frag.appendChild(doc.createTextNode(text.slice(lastIndex, start)))
