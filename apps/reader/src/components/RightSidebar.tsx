@@ -1,8 +1,8 @@
 import clsx from 'clsx'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { MdClose } from 'react-icons/md'
 
-import { useMobile, useTranslation } from '../hooks'
+import { useMobile } from '../hooks'
 import { useAiState } from '../state'
 
 import { useSplitViewItem } from './base'
@@ -17,7 +17,6 @@ const TABS: { key: TabKey; label: string }[] = [
 export const RightSidebar: React.FC = () => {
   const mobile = useMobile()
   const [aiState, setAiState] = useAiState()
-  const t = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
 
   const activeTab: TabKey = useMemo(
