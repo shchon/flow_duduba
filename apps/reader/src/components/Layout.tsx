@@ -142,7 +142,7 @@ const viewActions: IViewAction[] = [
 const ActivityBar: React.FC<{ onOpenVocabulary: () => void }> = ({
   onOpenVocabulary,
 }) => {
-  useSplitViewItem(ActivityBar, {
+  useSplitViewItem(ActivityBar as React.FC, {
     preferredSize: 48,
     minSize: 48,
     maxSize: 48,
